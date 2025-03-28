@@ -17,31 +17,47 @@ const createUser = async (name: string, email: string, password: string) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ name, email, password }),
-  });
-  const data = await response.json();
-  return data;
+  }); 
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw { status: response.status, message: errorData.error || 'Unknown error' };
+  }
+
+  return await response.json();
 };
 
 export default function Register() {
-  const notify = () => toast("Registered successfully!");
+  const notify = (message: string, style: string, progressColor: string) => toast(message, {
+    autoClose: 3000,
+    className: style,
+    progressClassName: progressColor,
+  }); 
 
-  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, formState: { errors }, watch, reset } = useForm({
     mode: "onChange"
   });
   
   const onSubmit = async (data: any) => {
     try {
-      const result = await createUser(data.name, data.email, data.password);
-      notify()
-      console.log(result)
-    } catch (error) {
-      return 1;
+      await createUser(data.name, data.email, data.password);
+      notify("Registered successfully!", "black-background", "progress-success");
+
+      reset();
+    } catch (error: any) {
+      if (error.status === 400) {
+        notify("This user already exists!", "black-background", "progress-error");
+      } else if (error.status === 500) {
+        notify("Something went wrong! Try again later...", "black-background", "progress-error");
+      } else {
+        notify("An unexpected error occurred", "black-background", "progress-error");
+      }
     }
   };
-
-  const nameValue = watch('name');
-  const emailValue = watch('email');
-  const passwordValue = watch('password');
+  
+  let nameValue = watch('name');
+  let emailValue = watch('email');
+  let passwordValue = watch('password');
 
   return (
     <div className="flex items-center justify-center h-screen">
