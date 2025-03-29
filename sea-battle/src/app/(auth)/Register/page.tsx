@@ -1,17 +1,15 @@
 "use client";
 
-import { useState } from 'react';
 import MainPageShip from "@/icons/MainPageShip";
 import Apple from "@/icons/Apple";
 import Google from "@/icons/Google";
 import Success from "@/icons/Success";
 import Error from '@/icons/Error';
-import { error } from 'console';
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 
 const createUser = async (name: string, email: string, password: string) => {
-  const response = await fetch('/api/users', {
+  const response = await fetch('/api/users/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,13 +35,19 @@ export default function Register() {
   const { register, handleSubmit, formState: { errors }, watch, reset } = useForm({
     mode: "onChange"
   });
+
+  const forbiddenNames = ["admin", "god", "pidor", "gandon", "suka", "hitler", "1488", "crimea", "donbass", "huesos"];
   
   const onSubmit = async (data: any) => {
     try {
-      await createUser(data.name, data.email, data.password);
-      notify("Registered successfully!", "black-background", "progress-success");
-
-      reset();
+      if(forbiddenNames.some(name => data.name.includes(name))){
+        notify("Nice try! But developer already took this names", "black-background", "progress-error");
+      }else{
+        await createUser(data.name, data.email, data.password);
+        notify("Registered successfully!", "black-background", "progress-success");
+  
+        reset();
+      }
     } catch (error: any) {
       if (error.status === 400) {
         notify("This user already exists!", "black-background", "progress-error");
@@ -117,7 +121,6 @@ export default function Register() {
           </div>
           <div className="flex flex-col items-center space-y-2 mt-4">
             <span className="text-gray-500 hover:text-sky-400 cursor-pointer">Already have an account?</span>
-            <span className="text-gray-500 hover:text-sky-400 cursor-pointer">Forgot password?</span>
           </div>
         </div>
       </div>
