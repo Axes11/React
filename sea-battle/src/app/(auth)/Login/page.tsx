@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import MainPageShip from "@/icons/MainPageShip";
 import Apple from "@/icons/Apple";
 import Google from "@/icons/Google";
@@ -34,6 +35,9 @@ const loginUser = async (name: string, password: string) => {
 };
 
 export default function Register() {
+
+  let [isLoading, setIsLoading] = useState(false);
+
   const notify = (message: string, style: string, progressColor: string) => toast(message, {
     autoClose: 3000,
     className: style,
@@ -44,15 +48,19 @@ export default function Register() {
   
   const onSubmit = async (data: any) => {
     try {
+      setIsLoading(true);
+
       const res = await loginUser(data.name, data.password);
-      notify("Loginned successfully!", "black-background", "progress-success");
+      notify(`Loginned successfully! Hello ${res}!`, "black-background", "progress-success");
   
+      setIsLoading(false);
+
       reset();
 
-      console.log(res)
-
-      // setTimeout(redirectToGame("Game"), 3100);
+      setTimeout(() => {redirectToGame("Game")}, 3100);
     } catch (error: any) {
+      setIsLoading(false);
+
       if (error.status === 400) {
         notify("Login or password are wrong!", "black-background", "progress-error");
       }else {
@@ -86,7 +94,7 @@ export default function Register() {
               {...register("password")}
             />
           </div>
-          <button className="button" type="submit">Login</button>
+          <button className="button" type="submit">{isLoading ? "Logining..." : "Login"}</button>
         </form>
 
         <div className="w-100 flex flex-col items-center justify-center">

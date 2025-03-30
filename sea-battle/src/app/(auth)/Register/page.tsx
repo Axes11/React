@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import MainPageShip from "@/icons/MainPageShip";
 import Apple from "@/icons/Apple";
 import Google from "@/icons/Google";
@@ -7,6 +8,7 @@ import Success from "@/icons/Success";
 import Error from '@/icons/Error';
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
+import { redirect } from "next/navigation";
 
 const createUser = async (name: string, email: string, password: string) => {
   const response = await fetch('/api/users/register', {
@@ -25,7 +27,17 @@ const createUser = async (name: string, email: string, password: string) => {
   return await response.json();
 };
 
+const redirectToGame = (to: string) => {
+      const currentPath = window.location.pathname;
+      if (currentPath !== `/${to}`) {     
+            redirect(`/${to}`);
+      }
+};
+
+
 export default function Register() {
+  let [isRegistering, setIsRegistering] = useState(false); 
+
   const notify = (message: string, style: string, progressColor: string) => toast(message, {
     autoClose: 3000,
     className: style,
@@ -36,19 +48,26 @@ export default function Register() {
     mode: "onChange"
   });
 
-  const forbiddenNames = ["admin", "god", "pidor", "gandon", "suka", "hitler", "1488", "crimea", "donbass", "huesos"];
+  const forbiddenNames = ["admin", "god", "pidor", "gandon", "suka", "hitler", "1488", "crimea", "donbass", "huesos", "nigger", "nigga"];
   
   const onSubmit = async (data: any) => {
     try {
       if(forbiddenNames.some(name => data.name.includes(name))){
         notify("Nice try! But developer already took this names", "black-background", "progress-error");
       }else{
+        setIsRegistering(true);
+
         await createUser(data.name, data.email, data.password);
         notify("Registered successfully!", "black-background", "progress-success");
   
+        setIsRegistering(false);
         reset();
+
+        setTimeout(() => {redirectToGame("Login")}, 3100)
       }
     } catch (error: any) {
+      setIsRegistering(false);
+
       if (error.status === 400) {
         notify("This user already exists!", "black-background", "progress-error");
       } else if (error.status === 500) {
@@ -111,7 +130,7 @@ export default function Register() {
               {passwordValue && !errors.password && <Success/>}
             </div>
           </div>
-          <button className="button" type="submit">Register</button>
+          <button className="button" type="submit">{isRegistering ? "Registering..." : "Register"}</button>
         </form>
 
         <div className="w-100 flex flex-col items-center justify-center">
@@ -120,7 +139,7 @@ export default function Register() {
             <Apple />
           </div>
           <div className="flex flex-col items-center space-y-2 mt-4">
-            <span className="text-gray-500 hover:text-sky-400 cursor-pointer">Already have an account?</span>
+            <span className="text-gray-500 hover:text-sky-400 cursor-pointer" onClick={() => {redirectToGame("Login")}}>Already have an account?</span>
           </div>
         </div>
       </div>
