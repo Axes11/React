@@ -20,7 +20,7 @@ export default function Game(){
                               <div><Logout/></div>
                         </div>
                   </header>
-                  <div className="flex justify-between mt-5">
+                  <div className="flex justify-between items-end mt-5">
                         <PlayerStats/>
                         <GameStats/>
                         <PlayerStats/>
