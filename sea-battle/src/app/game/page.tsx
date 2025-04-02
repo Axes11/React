@@ -4,6 +4,7 @@ import MainPageShip from "@/icons/MainPageShip";
 import Logout from "@/icons/Logout";
 import PlayerStats from "@/components/PlayerStats/PlayerStats";
 import GameStats from "@/components/GameStats/GameStats";
+import PlayArea from "@/components/PlayArea/PlayArea";
 
 export default function Game(){
       return(
@@ -20,10 +21,17 @@ export default function Game(){
                               <div><Logout/></div>
                         </div>
                   </header>
-                  <div className="flex justify-between items-end mt-5">
-                        <PlayerStats/>
+                  <div className="flex justify-between items-start mt-10">
+                        <div className="flex flex-col items-center gap-10">
+                              <PlayerStats/>
+                              <PlayArea/>
+                        </div>
                         <GameStats/>
-                        <PlayerStats/>
+                        <div className="flex flex-col items-center gap-10">
+                              <PlayerStats/>
+                              <PlayArea/>
+                        </div>
+                        
                   </div>
             </div>
       )
