@@ -33,7 +33,7 @@ export default function PlayArea() {
                         <div className="h-[35px]">
                             <SmallShip />
                         </div>
-                        <span>x 4</span>
+                        <span>x4</span>
                     </div>
                     <div className="flex items-center justify-between p-4 hover:bg-[#212121] cursor-pointer">
                         <div className="flex items-center gap-1">
@@ -43,7 +43,7 @@ export default function PlayArea() {
                         <div className="h-[35px]">
                             <MiddleShip />
                         </div>
-                        <span>x 3</span>
+                        <span>x3</span>
                     </div>
                     <div className="flex items-center justify-between p-4 hover:bg-[#212121] cursor-pointer">
                         <div className="flex items-center gap-1">
@@ -54,7 +54,7 @@ export default function PlayArea() {
                         <div className="h-[35px]">
                             <PreBiggestShip />
                         </div>
-                        <span>x 2</span>
+                        <span>x2</span>
                     </div>
                     <div className="flex items-center justify-between p-4 hover:bg-[#212121] cursor-pointer">
                         <div className="flex items-center gap-1">
@@ -66,7 +66,7 @@ export default function PlayArea() {
                         <div className="h-[35px]">
                             <BiggestShip />
                         </div>
-                        <span>x 1</span>
+                        <span>x1</span>
                     </div>
                 </div>
             </div>
